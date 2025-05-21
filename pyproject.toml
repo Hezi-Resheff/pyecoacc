@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pyecoacc"
+version = "0.1.0"
+description = "A python package for supervised learning of behavioral modes from sensor data."
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [
+    { name = "Hezi Resheff", email = "Hezi.Resheff+pyecoacc@gmail.com" }
+]
+requires-python = ">=3.8"
+dependencies = [
+    "numpy",
+    "pandas",
+    "scikit-learn",
+    "torch",
+    "skorch"
+]
+
+[project.urls]
+Homepage = "https://github.com/Hezi-Resheff/pyecoacc"
+Repository = "https://github.com/Hezi-Resheff/pyecoacc"
