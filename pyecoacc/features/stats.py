@@ -1,5 +1,5 @@
 import numpy as np
-from scipy import stats
+import scipy
 
 ODBA_LOW_PASS_WINDOW = 10
 window = np.ones(ODBA_LOW_PASS_WINDOW) / ODBA_LOW_PASS_WINDOW
@@ -44,8 +44,8 @@ def dominant_freq(x):
 single_axis_features = {
     "mean": lambda x: x.mean(axis=1),
     "std": lambda x: x.std(axis=1),
-    "skew": lambda x: stats.skew(x, axis=1),
-    "kurt": lambda x: stats.kurtosis(x, axis=1),
+    "skew": lambda x: scipy.stats.skew(x, axis=1),
+    "kurt": lambda x: scipy.stats.kurtosis(x, axis=1),
     "min": lambda x: x.min(axis=1),
     "max": lambda x: x.max(axis=1),
     "amplitude": lambda x: x.max(axis=1) - x.min(axis=1),
