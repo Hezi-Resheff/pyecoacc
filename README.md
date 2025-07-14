@@ -8,8 +8,6 @@ pyecoacc is built on top of sklearn and pytorch, and provides convenient pipelin
 
 Install from PyPI: 
 
-> **Note:** PyPI installation is not yet available. Please install from source for now.
-
 
 ```bash
 pip install pyecoacc   

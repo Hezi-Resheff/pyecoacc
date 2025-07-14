@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pyecoacc"
-version = "0.2.0"
+version = "1.0.0"
 description = "A python package for supervised learning of behavioral modes from sensor data."
 readme = "README.md"
 license = { file = "LICENSE" }
