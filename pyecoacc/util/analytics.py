@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from sklearn.metrics import confusion_matrix, classification_report
-from sklearn.model_selection import StratifiedKFold, LeaveOneGroupOut
+from sklearn.model_selection import StratifiedKFold, LeaveOneGroupOut, GroupKFold
 from sklearn.preprocessing import LabelEncoder
 
 
@@ -24,6 +24,10 @@ def model_analytics_cv(X, y, model, cv=5, cv_method="stratified", individuals=No
     if cv_method == "stratified":
         cross_val_spliter = StratifiedKFold(n_splits=cv, shuffle=True, random_state=random_state)
         split_indices = cross_val_spliter.split(X, y)
+    
+    elif cv_method == "animal-groups":
+        cross_val_splitter = GroupKFold(n_splits=cv)
+        split_indices = cross_val_splitter.split(X, y, individuals)     
 
     elif cv_method == "LOIO":
         cross_val_splitter = LeaveOneGroupOut()
@@ -39,7 +43,7 @@ def model_analytics_cv(X, y, model, cv=5, cv_method="stratified", individuals=No
         y_hat = model.fit(X_train, y_train).predict(X_test)
 
         group_name = None
-        if cv_method == "stratified":
+        if cv_method in ("stratified", "animal-groups"):
             group_name = i + 1
         elif cv_method == "LOIO":
             group_name = np.unique(individuals[test_index])[0]
