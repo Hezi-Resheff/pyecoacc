@@ -1,0 +1,45 @@
+site_name: PyEcoAcc
+site_description: A Python package for supervised learning of behavioral modes from acceleration data.
+site_author: <anon for review>
+site_url: https://github.com/zeekresheff/pyecoacc
+
+theme:
+  name: material
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - search.suggest
+
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - API Reference: api.md
+  - Contributing: contributing.md
+
+plugins:
+  - search
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          paths: [".","./pyecoacc"] 
+          options:
+            docstring_style: google
+            show_root_heading: true
+            show_if_no_docstring: false
+            # Set this to false if you want __init__ to have its own section
+            merge_init_into_class: true
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.inlinehilite
+  - toc:
+      permalink: true
+
+# Add this part:
+nav:
+  - Home: index.md
+  - Features: reference/features.md
+  - Models: reference/models.md
+  - Utilities: reference/util.md

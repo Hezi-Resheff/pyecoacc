@@ -4,3 +4,6 @@ scikit-learn
 torch
 skorch
 xgboost 
+mkdocs
+mkdocs-material
+mkdocstrings[python]
