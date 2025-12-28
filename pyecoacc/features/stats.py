@@ -78,3 +78,30 @@ multiple_axis_features = {
     "std_diff_yz": lambda x, y, z, n: (z - y).std(axis=1),
 }
 
+def register_single_axis_feature(name, func):
+    """Add a single-axis feature to the feature registry.
+
+    Args:
+        name (str): the name of the added feature. 
+        func (function): the function that computes the feature. The function should take a 2D numpy array (samples x timepoints) and return a 1D numpy array (samples,).
+    """
+    single_axis_features[name] = func
+
+def register_multiple_axis_feature(name, func):
+    """Add a multiple-axis feature to the feature registry.
+
+    Args:
+        name (str): the name of the added feature. 
+        func (function): the function that computes the feature. The function should take four 2D numpy arrays (X, Y, Z, norm) and return a 1D numpy array (samples,).
+    """
+    multiple_axis_features[name] = func 
+    
+def set_ODBA_low_pass_window(window_size):
+    """Set the smoothing window size for the ODBA calculations.
+
+    Args:
+        window_size (int): the number of samples to use in the moving average filter.
+    """
+    global ODBA_LOW_PASS_WINDOW, window
+    ODBA_LOW_PASS_WINDOW = window_size
+    window = np.ones(ODBA_LOW_PASS_WINDOW) / ODBA_LOW_PASS_WINDOW   

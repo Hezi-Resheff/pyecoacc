@@ -11,18 +11,26 @@ def long_to_wide_segments(
     timestamp_col: str = "Timestamp",
     sort_by_time: bool = True,
 ) -> pd.DataFrame:
-    """
-    Make a wide dataframe: one row per non-overlapping segment. Appropriate to use for a single animal with continuous data.    
+    """ Make a wide dataframe: one row per non-overlapping segment. Appropriate to use for a single animal with continuous data.    
     
-    Columns:
-      x, y, z, x.1, y.1, z.1, x.2, y.2, z.2, ...
-    Index:
-        segment start time
-
-    Assumes (approximately) constant sampling interval; drops the last partial segment.
+    The input format uses the original long-shape columns: X, Y, Z, timestamp. Assumes (approximately) constant sampling interval; drops the last partial segment.
     Assumes no gaps. 
     
     We thank an anonymous reviewer for contributing this function.
+    
+
+    Args:
+        df (pd.DataFrame): input dataframe
+        segment_duration (str, optional): encodes the duration of each segment. Defaults to "1s".
+        xcol (str, optional): the name of the column for the X acceleration axis. Defaults to "accX".
+        ycol (str, optional): the name of the column for the Y acceleration axis. Defaults to "accY".
+        zcol (str, optional): the name of the column for the Z acceleration axis. Defaults to "accZ".
+        timestamp_col (str, optional): the name of the column for the timestamp. Defaults to "Timestamp".
+        sort_by_time (bool, optional): if True, sort the data by timestamp. Defaults to True.
+
+
+    Returns:
+        segment_table (pd.DataFrame): a wide dataframe with one row per non-overlapping segment.
     """
     
     d = df[[timestamp_col, xcol, ycol, zcol]].copy()
@@ -74,17 +82,26 @@ def long_to_wide_multi_animal(
     timestamp_col: str = "Timestamp",
     sort_by_time: bool = True,
 ) -> pd.DataFrame:
-    """
-    Make a wide dataframe: one row per non-overlapping segment. Appropriate to use for multiple animals with continuous data for each one.     
+    """Make a wide dataframe: one row per non-overlapping segment. Appropriate to use for multiple animals with continuous data for each one.     
 
-    Columns:
-        x, y, z, x.1, y.1, z.1, x.2, y.2, z.2, ...
-    Index:
-        animalID, segment start time
 
     Assumes (approximately) constant sampling interval; drops the last partial segment.
     Assumes no gaps in the data of each animal. 
+
+    Args:
+        df (pd.DataFrame): input dataframe
+        segment_duration (str, optional): encodes the duration of each segment. Defaults to "1s".
+        xcol (str, optional): the name of the column for the X acceleration axis. Defaults to "accX".
+        ycol (str, optional): the name of the column for the Y acceleration axis. Defaults to "accY".
+        zcol (str, optional): the name of the column for the Z acceleration axis. Defaults to "accZ".
+        timestamp_col (str, optional): the name of the column for the timestamp. Defaults to "Timestamp".
+        sort_by_time (bool, optional): if True, sort the data by timestamp. Defaults to True.
+        id_col (str, optional): _description_. Defaults to "AnimalID".
+       
+    Returns:
+        segment_table (pd.DataFrame): a wide dataframe with one row per non-overlapping segment.
     """
+
     all_animals = [] 
     
     for animal_id, animal in df.groupby(id_col):

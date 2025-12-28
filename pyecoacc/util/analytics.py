@@ -6,6 +6,17 @@ from sklearn.preprocessing import LabelEncoder
 
 
 def compute_confusion_matrix(y_true, y_pred, normalize='true', round=2):
+    """Compute confusion matrix.
+
+    Args:
+        y_true (np.array or list): Ground truth labels.
+        y_pred (np.array or list): Predicted labels.
+        normalize (str, optional): When set to 'true' normalize rows of confusion matrix. Passed to sklearn.metrics.confusion_matrix. Defaults to 'true'.
+        round (int, optional): Number of decimal points to keep. Defaults to 2.
+
+    Returns:
+        confusion_matrix (pd.DataFrame): Confusion matrix as a pandas DataFrame.
+    """
     lbls = list(np.unique(y_true))
     cm = confusion_matrix(y_true, y_pred, labels=lbls, normalize=normalize)
     return pd.DataFrame(cm, index=lbls, columns=lbls).round(round)
@@ -13,6 +24,24 @@ def compute_confusion_matrix(y_true, y_pred, normalize='true', round=2):
 
 def model_analytics_cv(X, y, model, cv=5, cv_method="stratified", individuals=None,
                        random_state=42):
+    """Computes model analytics table.
+
+    Args:
+        X (np.array): feature matrix
+        y (np.array): labels vector
+        model (Pipeline or Estimator): model to evaluate
+        cv (int, optional): number of cross-validation splits. Defaults to 5.
+        cv_method (str, optional): cross-validation method. Options include stratified, animal-groups, and LOIO. Defaults to "stratified".
+        individuals (np.array, optional): individual identifiers for grouping. Defaults to None.
+        random_state (int, optional): random state for reproducibility. Defaults to 42.
+
+
+    Returns:
+        overall_accuracy (DataFrame): overall accuracy per CV split
+        mean_report (DataFrame): mean classification report across CV splits
+        std_report (DataFrame): standard deviation of classification report across CV splits
+        splits_output (dict): detailed classification reports per CV split
+    """
     splits_output = dict()
     overall_accuracy = dict()
 
@@ -66,6 +95,26 @@ def model_analytics_cv(X, y, model, cv=5, cv_method="stratified", individuals=No
 
 def compare_models_cv(X, y, model_dict, cv=5, cv_method="stratified", individuals=None,
                       random_state=42, round_digits=3):
+    """Compute summary tables to compare models. 
+
+    Args:
+        X (np.array): feature matrix
+        y (np.array): labels vector
+        model_dict (dict): a dictionary of models to evaluate with format {"model_name": model}
+        cv (int, optional): number of cross-validation splits. Defaults to 5.
+        cv_method (str, optional): cross-validation method. Options include stratified, animal-groups, and LOIO. Defaults to "stratified".
+        individuals (np.array, optional): individual identifiers for grouping. Defaults to None.
+        random_state (int, optional): random state for reproducibility. Defaults to 42.
+        round_digits (int, optional): number of decimal places to round results. Defaults to 3.
+
+    Returns:
+        accuracy(DataFrame): summary table of overall accuracy across CV splits
+        recall(DataFrame): summary table of recall per model
+        precision(DataFrame): summary table of precision per model
+        f1(DataFrame): summary table of F1-score per model
+        all_data (dict): detailed results per model
+    """
+
     all_data = dict()
     accuracy = dict()
 

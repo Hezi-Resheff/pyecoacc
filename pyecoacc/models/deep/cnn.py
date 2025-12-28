@@ -12,8 +12,19 @@ from sklearn.pipeline import Pipeline
 
 
 class BehaviorCNNClassifier(nn.Module):
+    """
+    A Convolutional Neural Network for classifying behaviors from accelerometer data.  
+    """
     def __init__(self, num_classes, sequence_length, conv_filters=[32, 64, 128, 256], 
                  fc_layers=[256, 512], kernel_size=5):
+        """
+        Args:
+            num_classes (int): the number of behavior classes to predict.
+            sequence_length (int): the length of the input accelerometer sequence.
+            conv_filters (list, optional): the number of filters in each convolutional block. Defaults to [32, 64, 128, 256].
+            fc_layers (list, optional): the size of each fully connected layer. Defaults to [256, 512].
+            kernel_size (int, optional): the kernel size for convolutional layers. Defaults to 5.
+        """
         super().__init__()
 
         self.conv_blocks = nn.ModuleList()
@@ -72,7 +83,7 @@ class CNNInputReshaper(BaseEstimator, TransformerMixin):
     """
     Reshapes input data for CNN processing of accelerometer data.
     Transforms 2D input (n_samples, 3*sequence_length) into
-    3D output (n_samples, 3, sequence_length) for CNN input.
+    3D output (n_samples, 3, sequence_length) for CNN input. This is used as a first step in an sklearn pipeline to generate sklearn-compatible CNN models.
     """
 
     def fit(self, X, y=None):
@@ -87,11 +98,30 @@ class CNNInputReshaper(BaseEstimator, TransformerMixin):
         return self.arrange_acc_for_cnn(X)
 
 
-def make_cnn_model(input_dim, num_behav, 
+def make_cnn_model(sequence_length, num_behav, 
                    conv_filters=[32, 64, 128, 256], 
                    fc_layers=[256, 512], 
                    kernel_size=5,
                    max_epoch=200, lr=.001, l2=5e-4, verbose=1, validation=.2, patience=50, allow_cuda=True):
+    """Generate an sklearn-compatible model from a CNN specification
+
+    Args:
+        num_classes (int): the number of behavior classes to predict.
+        sequence_length (int): the length of the input accelerometer sequence.
+        conv_filters (list, optional): the number of filters in each convolutional block. Defaults to [32, 64, 128, 256].
+        fc_layers (list, optional): the size of each fully connected layer. Defaults to [256, 512].
+        kernel_size (int, optional): the kernel size for convolutional layers. Defaults to 5.
+        max_epoch (int, optional): Maximum number of epochs used for training the model. Defaults to 200.
+        lr (float, optional): learning rate. Defaults to .001.
+        l2 (float, optional): regularization strength. Defaults to 5e-4.
+        verbose (int, optional): specifies verbosity level. Defaults to 1.
+        validation (float, optional): fraction of data used for validation. Defaults to .2.
+        patience (int, optional): number of epochs to wait before early stopping. Defaults to 50.
+        allow_cuda (bool, optional): whether to use CUDA if available. Defaults to True.
+
+    Returns:
+        Model (Pipeline): The CNN model wrapped in an sklearn Pipeline.
+    """
     
     net = NeuralNetClassifier(
         module=BehaviorCNNClassifier,
@@ -99,7 +129,7 @@ def make_cnn_model(input_dim, num_behav,
         module__fc_layers=fc_layers,
         module__kernel_size=kernel_size,  
         module__num_classes=num_behav,
-        module__sequence_length=input_dim,
+        module__sequence_length=sequence_length,
         criterion=nn.CrossEntropyLoss,
         optimizer__weight_decay=l2,
         
