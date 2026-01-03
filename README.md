@@ -3,6 +3,8 @@ A python package for supervised learning of behavioral modes from sensor data.
 
 pyecoacc is built on top of sklearn and pytorch, and provides convenient pipelines of feature computations and other preprocessing necessary to easily run behavior classification on sensor data. This package contains easy to use out of the box optoins, together with extendability and customization. 
 
+## Documentation
+You can find the full documentation [here](https://hezi-resheff.github.io/pyecoacc/).
 
 ## 📦 Installation
 
