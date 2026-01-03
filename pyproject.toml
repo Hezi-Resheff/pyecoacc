@@ -2,6 +2,10 @@
 requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["pyecoacc*"]  # This ensures only your package is bundled
+
 [project]
 name = "pyecoacc"
 version = "1.1.0"
