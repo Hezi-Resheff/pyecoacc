@@ -5,6 +5,7 @@ pyecoacc is built on top of sklearn and pytorch, and provides convenient pipelin
 
 ## Documentation
 You can find the full documentation [here](https://hezi-resheff.github.io/pyecoacc/).
+Complete workflow examples can be found in the examples folder. 
 
 ## 📦 Installation
 
