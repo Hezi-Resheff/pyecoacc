@@ -57,7 +57,7 @@ xg_model = make_classifier_pipeline(features=ACCStatsTransformer(),
                                     model=XGBClassifier(n_estimators=250)) 
 ```
 
-Custom CNN classifier:
+Custom CNN classifier (don't actually use anything so small unless it's just as a quick baseline...):
 
 ```python 
 from pyecoacc.models.deep.cnn import make_cnn_model
