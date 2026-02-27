@@ -72,3 +72,14 @@ tiny_cnn_model = make_cnn_model(input_dim=INPUT_ACC_LENGTH,
 classifier.fit(ACC_train, y_train)
 y_hat = classifier.predict(ACC_test)
 ```
+
+## 📖 Citation
+If you use pyecoacc in your research, please cite it using the following BibTeX entry:
+
+@article{resheff2026pyecoacc,
+  title={pyecoacc: A python package for supervised learning of behavioural modes from accelerometer data},
+  author={Resheff, Yehezkel S and Harel, Roi and Zlotnick, Omer B and Rotics, Shay},
+  journal={Methods in Ecology and Evolution},
+  year={2026},
+  publisher={Wiley Online Library}
+}
