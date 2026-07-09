@@ -1,0 +1,11 @@
+﻿name,species,raw-folder,load-func,segmented,bib
+Rotics-Molerats,Damaraland Mole-rats,rotics_molerats,read_rotics_molerats,molerats.csv,zottl2016differences
+Rotics-Meerkats,Meerkats,rotics_meerkats,read_rotics_meerkats,meerkats.csv,clutton2016meerkats
+Rotics-Storks,White Storks ,rotics_white_storks,read_rotics_storks,storks.csv,rotics2016challenges
+Sasha-Cranes,Cranes,sasha_cranes,read_sasha_cranes,cranes.csv,pekarsky2024cranes
+Harel-Baboons,Baboon,harel_baboons,read_harel_baboons,baboons.csv,NA
+Pagano-Bears,Polar Bear,pagano_bears,read_pagano_bears,bears.csv,pagano2017using
+Spiegel-Vultures,Griffon Vultures,spiegel_vultures,read_spiegel_vultures,vultures.csv,nathan2012using
+Agarwal-Dogs,African Wild Dogs,agarwal_african_wild_dogs,read_agarwal_african_wild_dogs,wild_dogs.csv,agarwal2026leveraging
+Ladds-Seals,Australian Fur Seals,ladds_seals,read_ladds_seals,seals.csv,ladds2018using
+Maekawa-Gulls,Black-tailed Gulls,maekawa_gulls,read_maekawa_gulls,gulls.csv,korpela2020machine
