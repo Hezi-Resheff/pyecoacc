@@ -4,9 +4,9 @@
 import numpy as np 
 import pandas as pd 
 
-from segment import *
-from loader import *
-from reader import *
+from .segment import *
+from .loader import *
+from .reader import *
 
 
 # Keep only behaviors that have at least this many segments in the dataset when possible 
