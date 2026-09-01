@@ -1,6 +1,6 @@
 import os
 import pandas as pd
-from reader import data_registry, DATA_DIR
+from .reader import data_registry, DATA_DIR
 
 
 SEGMENTS_DIR = os.path.join(DATA_DIR, "segments")

@@ -1,7 +1,7 @@
 import pandas as pd 
 import os 
 
-from reader import RAW_DIR
+from .reader import RAW_DIR
 
 
 BEAR_PATH = os.path.join(RAW_DIR, "pagano_bears")

@@ -147,7 +147,19 @@ def read_pagano_bears():
    
    return data 
    
-
+   
+def read_efrat_vultures():
+    raw_folder = reg.loc["Efrat-Vultures", "raw-folder"]
+    path = os.path.join(RAW_DIR, raw_folder)
+    data = pd.read_csv(os.path.join(path, "segments.csv"), header=None, index_col=None)
+    
+    l = (data.shape[1] - 2) // 3
+    
+    data.columns = [ANIMAL_ID_COL_NAME] + [ACC_X_COL_NAME, ACC_Y_COL_NAME, ACC_Z_COL_NAME] * l + [BEHAVIOR_COL_NAME]
+        
+    return data
+    
+    
 def read_spiegel_vultures():
     raw_folder = reg.loc["Spiegel-Vultures", "raw-folder"]
     path = os.path.join(RAW_DIR, raw_folder)
@@ -211,7 +223,6 @@ def read_agarwal_african_wild_dogs():
     }, inplace=True)
     
     return data 
-    
     
     
 def read_ladds_seals():
@@ -278,3 +289,10 @@ def read_maekawa_gulls():
     }, inplace=True)
     
     return data 
+
+
+if __name__ == "__main__":
+    df = read_efrat_vultures()
+    print(df.head())
+    print(df.groupby("behavior").size())
+    

@@ -1,5 +1,5 @@
 import pandas as pd
-from reader import * 
+from .reader import * 
 
 
 def segment(frame, id_column, time_column, behav_column, x_column="x", y_column="y", z_column="z", allow_behav_switches=True, segment_length=2.):
