@@ -2,9 +2,8 @@ import pandas as pd
 import numpy as np 
 import os 
 
-# Change this to the location the data will be downloaded to 
-DATA_DIR = os.path.expanduser("~/Desktop/acc-data")
-RAW_DIR = os.path.join(DATA_DIR, "raw")
+from loader import data_registry, reg, DATA_DIR, RAW_DIR
+
 
 # Standardize names of columns 
 ANIMAL_ID_COL_NAME = "ID"
@@ -14,15 +13,6 @@ ACC_X_COL_NAME = "X"
 ACC_Y_COL_NAME = "Y"
 ACC_Z_COL_NAME = "Z"
 
-
-def data_registry():
-    """ Load the data registry
-    """
-    here = os.path.dirname(__file__)
-    registry = pd.read_csv(os.path.join(here, "registry.csv"), index_col=0) 
-    return registry
-
-reg = data_registry()
 
 
 def read_rotics_molerats():
@@ -291,8 +281,39 @@ def read_maekawa_gulls():
     return data 
 
 
+def read_weibke_hares():
+    raw_folder = reg.loc["Weibke-Hares", "raw-folder"]
+    path = os.path.join(RAW_DIR, raw_folder)
+
+    all_segments = []
+        
+    for i, f in enumerate(os.listdir(path)):
+        if f.endswith(".txt"):
+            print(f)
+            frame = pd.read_csv(os.path.join(path, f), delimiter=" ", parse_dates=["time"], date_format="%H:%M:%S")
+            
+            frame["behaviour"].replace({"Sitting_upright": "Sitting", "Running_zigzag": "Running"}, inplace=True)
+            
+            # Make the segments per 1s 
+            frame["hour"] = frame["time"].dt.hour
+            frame["minute"] = frame["time"].dt.minute
+            frame["second"] = frame["time"].dt.second
+            
+            segments = frame.groupby(["hour", "minute", "second"]).apply(
+                lambda seg: [f"animal_{i}", seg.name, seg.name] + seg["x_ms y_ms z_ms".split()].values.flatten().tolist() + [seg["behaviour"].mode()[0]] 
+            )
+            segments = pd.DataFrame(segments.tolist(), index=segments.index).dropna(how="any").reset_index(drop=True)
+            
+            segments.columns =[ANIMAL_ID_COL_NAME, "start_time", "end_time"] + [ACC_X_COL_NAME, ACC_Y_COL_NAME, ACC_Z_COL_NAME] * 18 + [BEHAVIOR_COL_NAME]
+            all_segments.append(segments)        
+            
+    all_segments = pd.concat(all_segments, axis=0)
+    return all_segments
+
+
 if __name__ == "__main__":
-    df = read_efrat_vultures()
+    df = read_weibke_hares()
     print(df.head())
-    print(df.groupby("behavior").size())
+    print(df.shape)
+    print(df.groupby(BEHAVIOR_COL_NAME).size())
     

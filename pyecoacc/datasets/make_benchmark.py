@@ -4,9 +4,9 @@
 import numpy as np 
 import pandas as pd 
 
-from .segment import *
-from .loader import *
-from .reader import *
+from segment import *
+from loader import *
+from reader import *
 
 
 # Keep only behaviors that have at least this many segments in the dataset when possible 
@@ -51,8 +51,8 @@ def make_min_max_segments(min_seg=MINIMUM_BEHAVIOR_SEGMENTS,
         
         seg_length = 1.0 if animal in ("Ladds-Seals", "Harel-Baboons") else 2.0 if animal in ("Rotics-Molerats", "Rotics-Meerkats") else 3.0
         print("  -> segment length: ", seg_length)
-        
-        if animal not in ("Spiegel-Vultures", "Efrat-Vultures", "Rotics-Storks", "Sasha-Cranes"): # These already come as segments 
+                
+        if animal not in ("Spiegel-Vultures", "Efrat-Vultures", "Rotics-Storks", "Sasha-Cranes", "Weibke-Hares"): # These already come as segments 
             segments = segment(raw_data, 
                             id_column=ANIMAL_ID_COL_NAME, 
                             time_column=TIMESTAMP_COL_NAME, 
@@ -74,7 +74,7 @@ def make_min_max_segments(min_seg=MINIMUM_BEHAVIOR_SEGMENTS,
             segments_df = segments_df[segments_df.behavior.isin(use)].copy()
         
         # --> Keep only behaviors that have at least MINIMUM_BEHAVIOR_SEGMENTS segments in the dataset, and drop any behaviors that are in DROP_CODES
-        min_segments_keep = 100 if animal == "Harel-Baboons" else 50 if animal in ("Rotics-Storks", "Sasha-Cranes", "Efrat-Vultures") else min_seg
+        min_segments_keep = 100 if animal == "Harel-Baboons" else 50 if animal in ("Rotics-Storks", "Sasha-Cranes", "Efrat-Vultures", "Weibke-Hares") else min_seg
         keep_behavs = segments_df.behavior.value_counts()[segments_df.behavior.value_counts() >= min_segments_keep].index 
         keep_behavs = [b for b in keep_behavs if b not in DROP_CODES]
         segments_df = segments_df[segments_df.behavior.isin(keep_behavs)].copy()

@@ -1,7 +1,9 @@
 import os
 import pandas as pd
-from .reader import data_registry, DATA_DIR
 
+# Change this to the location the data will be downloaded to 
+DATA_DIR = os.path.expanduser("~/Desktop/acc-data")
+RAW_DIR = os.path.join(DATA_DIR, "raw")
 
 SEGMENTS_DIR = os.path.join(DATA_DIR, "segments")
 
@@ -11,6 +13,14 @@ FORMAT_XYZXYZ = 1
 FORMAT_LONG = 2
 FORMAT_TENSOR = 3
 
+
+
+def data_registry():
+    """ Load the data registry
+    """
+    here = os.path.dirname(__file__)
+    registry = pd.read_csv(os.path.join(here, "registry.csv"), index_col=0) 
+    return registry
 
 reg = data_registry()
 
