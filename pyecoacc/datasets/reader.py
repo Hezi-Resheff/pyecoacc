@@ -13,6 +13,9 @@ ACC_X_COL_NAME = "X"
 ACC_Y_COL_NAME = "Y"
 ACC_Z_COL_NAME = "Z"
 
+G_EARTH = 9.8
+E_OBS_OFFSET = 2048
+E_OBS_SLOPE = 0.0027
 
 
 def read_rotics_molerats():
@@ -29,6 +32,8 @@ def read_rotics_molerats():
         "y": ACC_Y_COL_NAME, 
         "z": ACC_Z_COL_NAME 
     }, inplace=True)
+    
+    df[[ACC_X_COL_NAME, ACC_Y_COL_NAME, ACC_Z_COL_NAME]] *= G_EARTH # G-> ms^-2
     
     return df 
 
@@ -60,6 +65,8 @@ def read_rotics_meerkats():
         "y": ACC_Y_COL_NAME, 
         "z": ACC_Z_COL_NAME 
     }, inplace=True)
+    
+    data[[ACC_X_COL_NAME, ACC_Y_COL_NAME, ACC_Z_COL_NAME]] *= G_EARTH # G-> ms^-2
     
     return data 
 
@@ -117,6 +124,10 @@ def read_harel_baboons():
         "z": ACC_Z_COL_NAME 
     }, inplace=True)
     
+    data[[ACC_X_COL_NAME, ACC_Y_COL_NAME, ACC_Z_COL_NAME]] -= E_OBS_OFFSET
+    data[[ACC_X_COL_NAME, ACC_Y_COL_NAME, ACC_Z_COL_NAME]] *= E_OBS_SLOPE
+    data[[ACC_X_COL_NAME, ACC_Y_COL_NAME, ACC_Z_COL_NAME]] *= G_EARTH 
+    
     return data 
     
 
@@ -164,13 +175,12 @@ def read_spiegel_vultures():
     data.rename(columns={
         "device_id": ANIMAL_ID_COL_NAME,
         "observed_beh": BEHAVIOR_COL_NAME,
-        "X": ACC_X_COL_NAME,
-        "Y": ACC_Y_COL_NAME, 
-        "Z": ACC_Z_COL_NAME 
     }, inplace=True)
     
-    return data 
+    acc_cols = [col for col in data.columns if col.startswith("acc_")]
+    data[acc_cols] *= G_EARTH
     
+    return data 
     
     
 def read_agarwal_african_wild_dogs():
@@ -212,6 +222,8 @@ def read_agarwal_african_wild_dogs():
          "Z": ACC_Z_COL_NAME 
     }, inplace=True)
     
+    data[[ACC_X_COL_NAME, ACC_Y_COL_NAME, ACC_Z_COL_NAME]] *= G_EARTH
+    
     return data 
     
     
@@ -247,6 +259,8 @@ def read_ladds_seals():
          "z": ACC_Z_COL_NAME 
     }, inplace=True)
     
+    data[[ACC_X_COL_NAME, ACC_Y_COL_NAME, ACC_Z_COL_NAME]] *= G_EARTH
+    
     return data 
 
     
@@ -277,6 +291,8 @@ def read_maekawa_gulls():
          "acc_y": ACC_Y_COL_NAME, 
          "acc_z": ACC_Z_COL_NAME 
     }, inplace=True)
+    
+    data[[ACC_X_COL_NAME, ACC_Y_COL_NAME, ACC_Z_COL_NAME]] *= G_EARTH
     
     return data 
 
