@@ -10,6 +10,18 @@ def dba(x):
     return np.absolute(x - smooth).mean(axis=1)
 
 
+def vedba(x, y, z, n):
+    smooth_x = np.apply_along_axis(lambda row: np.convolve(row, window, mode='same'), axis=1, arr=x)
+    smooth_y = np.apply_along_axis(lambda row: np.convolve(row, window, mode='same'), axis=1, arr=y)
+    smooth_z = np.apply_along_axis(lambda row: np.convolve(row, window, mode='same'), axis=1, arr=z)
+    
+    dyn_x = x - smooth_x
+    dyn_y = y - smooth_y
+    dyn_z = z - smooth_z
+    
+    return np.mean(np.sqrt(dyn_x**2 + dyn_y**2 + dyn_z**2), axis=1)
+
+
 def count_smooth_peaks(x):
     mat = np.apply_along_axis(lambda row: np.convolve(row, window, mode='same'), axis=1, arr=x)
     left = mat[:, :-2]
@@ -60,7 +72,7 @@ single_axis_features = {
 
 multiple_axis_features = {
     "ODBA": lambda x, y, z, n: dba(x) + dba(y) + dba(z),
-    "VeDBA": lambda x, y, z, n: np.sqrt(dba(x)**2 + dba(y)**2 + dba(z)**2),
+    "VeDBA": vedba,
     "cov_xy": lambda x, y, z, n: np.array([np.cov(x[i], y[i])[0, 1] for i in range(x.shape[0])]),
     "cov_xz": lambda x, y, z, n: np.array([np.cov(x[i], z[i])[0, 1] for i in range(x.shape[0])]),
     "cov_yz": lambda x, y, z, n: np.array([np.cov(z[i], y[i])[0, 1] for i in range(x.shape[0])]),
