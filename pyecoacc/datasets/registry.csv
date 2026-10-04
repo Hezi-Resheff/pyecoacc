@@ -10,4 +10,4 @@ Agarwal-Dogs,African Wild Dogs,agarwal_african_wild_dogs,read_agarwal_african_wi
 Ladds-Seals,Australian Fur Seals,ladds_seals,read_ladds_seals,seals.csv,ladds2018using
 Maekawa-Gulls,Black-tailed Gulls,maekawa_gulls,read_maekawa_gulls,gulls.csv,korpela2020machine
 Efrat-Vultures,Egyptian Vultures,efrat_vultures,read_efrat_vultures,vultures_egyptian.csv,efrat2023early
-Weibke-Hares,Hares,weibke_hares,read_weibke_hares,hares.csv,NA
+Weibke-Hares,Hares,weibke_hares,read_weibke_hares,hares.csv,ullmann2023secret
