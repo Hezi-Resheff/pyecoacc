@@ -11,3 +11,8 @@ Ladds-Seals,Australian Fur Seals,ladds_seals,read_ladds_seals,seals.csv,ladds201
 Maekawa-Gulls,Black-tailed Gulls,maekawa_gulls,read_maekawa_gulls,gulls.csv,korpela2020machine
 Efrat-Vultures,Egyptian Vultures,efrat_vultures,read_efrat_vultures,vultures_egyptian.csv,efrat2023early
 Weibke-Hares,Hares,weibke_hares,read_weibke_hares,hares.csv,ullmann2023secret
+Annett-Gliders,Mahogany Glider,Annett_Glider,read_annett_glider,gliders.csv,annett2024comparative
+Clemente-Echidna,Echidnas,Clemente_Echidna,read_clemente_echidna,echidnas.csv,clemente2016private
+Clemente-Impala,Impalas,Clemente_Impala,read_clemente_impala,impalas.csv,TBD
+Gaschk-Quoll,Quolls,Gaschk_Quoll,read_gaschk_quoll,quolls.csv,gaschk2023resting
+Galea-Cat,Cats,Galea_Cat,read_galea_cat,cats.csv,"galea2021quantifying,wilson2026conservation"

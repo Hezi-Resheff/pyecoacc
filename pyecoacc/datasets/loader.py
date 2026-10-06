@@ -25,9 +25,10 @@ def data_registry():
 reg = data_registry()
 
 
-def load_raw_dataset(dataset_name):
-    load_func = eval(reg.loc[dataset_name, "loader"])
-    return load_func()
+# TODO: deal with this later 
+# def load_raw_dataset(dataset_name):
+#     load_func = eval(reg.loc[dataset_name, "loader"])
+#     return load_func()
 
 
 def load_segmented_dataset(dataset_name, format=FORMAT_XYZXYZ):

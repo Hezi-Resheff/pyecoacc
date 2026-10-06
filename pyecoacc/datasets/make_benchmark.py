@@ -16,7 +16,7 @@ MINIMUM_BEHAVIOR_SEGMENTS = 200
 MAXIMUM_BEHAVIOR_SEGMENTS = 1000
 
 # These are names of non-behavior segments that should not be included
-DROP_CODES = ["NotScored", "Out of sight", "other", "unknown"]
+DROP_CODES = ["NotScored", "Out of sight", "other", "Other", "unknown", "Unknown"]
 
 # Save benchmark to here 
 BENCHMARK_TARGET_DIR = os.path.join(DATA_DIR, "segments")
@@ -49,8 +49,16 @@ def make_min_max_segments(min_seg=MINIMUM_BEHAVIOR_SEGMENTS,
         # Make the segments 
         raw_data = eval(registry.loc[animal, "load-func"])()
         
-        seg_length = 1.0 if animal in ("Ladds-Seals", "Harel-Baboons") else 2.0 if animal in ("Rotics-Molerats", "Rotics-Meerkats") else 3.0
+        seg_length = 1.0 if animal in ("Ladds-Seals", "Harel-Baboons", "Annett-Gliders", "Gaschk-Quoll", "Galea-Cat") else 2.0 if animal in ("Rotics-Molerats", "Rotics-Meerkats") else 3.0
         print("  -> segment length: ", seg_length)
+        
+        hz = None
+        if animal in ("Annett-Gliders", "Clemente-Impala", "Gaschk-Quoll", "Galea-Cat"):   
+            hz = 50. 
+            
+        check_gap = True
+        if animal in ("Annett-Gliders", "Clemente-Impala", "Gaschk-Quoll", "Galea-Cat"):   
+            check_gap = False 
                 
         if animal not in ("Spiegel-Vultures", "Efrat-Vultures", "Rotics-Storks", "Sasha-Cranes", "Weibke-Hares"): # These already come as segments 
             segments = segment(raw_data, 
@@ -61,7 +69,10 @@ def make_min_max_segments(min_seg=MINIMUM_BEHAVIOR_SEGMENTS,
                             y_column=ACC_Y_COL_NAME, 
                             z_column=ACC_Z_COL_NAME, 
                             allow_behav_switches=False, 
-                            segment_length=seg_length)
+                            segment_length=seg_length,
+                            hz=hz,
+                            check_gap=check_gap 
+                            )
             
             segments_df = make_segments_csv(segments)
         else:
@@ -74,7 +85,7 @@ def make_min_max_segments(min_seg=MINIMUM_BEHAVIOR_SEGMENTS,
             segments_df = segments_df[segments_df.behavior.isin(use)].copy()
         
         # --> Keep only behaviors that have at least MINIMUM_BEHAVIOR_SEGMENTS segments in the dataset, and drop any behaviors that are in DROP_CODES
-        min_segments_keep = 100 if animal == "Harel-Baboons" else 50 if animal in ("Rotics-Storks", "Sasha-Cranes", "Efrat-Vultures", "Weibke-Hares") else min_seg
+        min_segments_keep = 100 if animal in ("Harel-Baboons", "Annett-Gliders") else 50 if animal in ("Rotics-Storks", "Sasha-Cranes", "Efrat-Vultures", "Weibke-Hares") else min_seg
         keep_behavs = segments_df.behavior.value_counts()[segments_df.behavior.value_counts() >= min_segments_keep].index 
         keep_behavs = [b for b in keep_behavs if b not in DROP_CODES]
         segments_df = segments_df[segments_df.behavior.isin(keep_behavs)].copy()

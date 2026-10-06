@@ -327,9 +327,133 @@ def read_weibke_hares():
     return all_segments
 
 
+def read_annett_glider():
+    raw_folder = reg.loc["Annett-Gliders", "raw-folder"]
+    df = pd.read_csv(os.path.join(RAW_DIR, raw_folder, "Annett_Glider_labelled.csv"), index_col=None)
+    
+    activity_codes = pd.read_csv(os.path.join(RAW_DIR, raw_folder, "Mahog_Glider_Behaviour_Act_Number.csv"), index_col="number")
+    df["Activity"] = df["Activity"].map(activity_codes["activity"])
+    
+    df.rename(columns={
+        "ID": ANIMAL_ID_COL_NAME,
+        "Time": TIMESTAMP_COL_NAME,
+        "Activity": BEHAVIOR_COL_NAME,
+        "X": ACC_X_COL_NAME,
+        "Y": ACC_Y_COL_NAME, 
+        "Z": ACC_Z_COL_NAME 
+        }, inplace=True)
+     
+    df[TIMESTAMP_COL_NAME] = pd.to_datetime(df[TIMESTAMP_COL_NAME], format='%Y-%m-%dT%H:%M:%S.%fZ', errors='coerce')
+    df[[ACC_X_COL_NAME, ACC_Y_COL_NAME, ACC_Z_COL_NAME]] *= G_EARTH    
+    
+    return df 
+    
+    
+def read_clemente_echidna():
+    raw_folder = reg.loc["Clemente-Echidna", "raw-folder"]
+    df = pd.read_csv(os.path.join(RAW_DIR, raw_folder, "Clemente_Echidna_labelled.csv"), index_col=None)
+    
+    # Choose an arbitrary start date
+    start_date = pd.Timestamp('2000-01-01')
+
+    # Create the new datetime column by adding the seconds
+    df['Time'] = start_date + pd.to_timedelta(df['Time'], unit='s')   
+    
+    activity_codes = {0: "Unknown",
+                      1: "Inactivity",
+                      2: "Digging",
+                      3: "Walking",
+                      4: "Climbing"} 
+    
+    df["Activity"] = df["Activity"].map(activity_codes)
+    
+    df.rename(columns={
+            "ID": ANIMAL_ID_COL_NAME,
+            "Time": TIMESTAMP_COL_NAME,
+            "Activity": BEHAVIOR_COL_NAME,
+            "X": ACC_X_COL_NAME,
+            "Y": ACC_Y_COL_NAME, 
+            "Z": ACC_Z_COL_NAME 
+            }, inplace=True)
+         
+    df[[ACC_X_COL_NAME, ACC_Y_COL_NAME, ACC_Z_COL_NAME]] *= G_EARTH    
+    return df 
+
+
+def read_clemente_impala():
+    raw_folder = reg.loc["Clemente-Impala", "raw-folder"]
+    df = pd.read_csv(os.path.join(RAW_DIR, raw_folder, "Clemente_Imapla_labelled.csv"), index_col=None)
+    
+    df.rename(columns={
+                "ID": ANIMAL_ID_COL_NAME,
+                "utc_datetime": TIMESTAMP_COL_NAME,
+                "Activity": BEHAVIOR_COL_NAME,
+                "RawAX.cl": ACC_X_COL_NAME,
+                "RawAY.cl": ACC_Y_COL_NAME, 
+                "RawAZ.cl": ACC_Z_COL_NAME 
+                }, inplace=True)
+    
+    df[TIMESTAMP_COL_NAME] = pd.to_datetime(df[TIMESTAMP_COL_NAME], format='%Y-%m-%dT%H:%M:%S.%fZ', errors='coerce')
+    df[[ACC_X_COL_NAME, ACC_Y_COL_NAME, ACC_Z_COL_NAME]] *= G_EARTH    
+    return df 
+        
+
+def read_gaschk_quoll():
+    raw_folder = reg.loc["Gaschk-Quoll", "raw-folder"]
+    df = pd.read_csv(os.path.join(RAW_DIR, raw_folder, "Gashk_Quoll_formatted.csv"), index_col=None, parse_dates=["Time"])
+    
+    activity_codes = pd.read_csv(os.path.join(RAW_DIR, raw_folder, "Quoll_Behaviour_ActNo.csv"), index_col="Number")
+    df["Activity"] = df["Activity"].map(activity_codes["Activity"])
+        
+    df.rename(columns={
+        "ID": ANIMAL_ID_COL_NAME,
+        "Time": TIMESTAMP_COL_NAME,
+        "Activity": BEHAVIOR_COL_NAME,
+        "X": ACC_X_COL_NAME,
+        "Y": ACC_Y_COL_NAME, 
+        "Z": ACC_Z_COL_NAME 
+        }, inplace=True)
+    
+    df = df.dropna(how='any').reset_index(drop=True)
+    df[TIMESTAMP_COL_NAME] = pd.to_datetime(df[TIMESTAMP_COL_NAME], format='%Y-%m-%dT%H:%M:%S.%fZ', errors='coerce')
+    df[[ACC_X_COL_NAME, ACC_Y_COL_NAME, ACC_Z_COL_NAME]] *= G_EARTH    
+    return df 
+
+            
+
+def read_galea_cat():
+    raw_folder = reg.loc["Galea-Cat", "raw-folder"]
+    df = pd.read_csv(os.path.join(RAW_DIR, raw_folder, "Galea_Cat_formatted.csv"), index_col=None)
+    
+    df.rename(columns={
+        "ID": ANIMAL_ID_COL_NAME,
+        "Time": TIMESTAMP_COL_NAME,
+        "Activity": BEHAVIOR_COL_NAME,
+        "X": ACC_X_COL_NAME,
+        "Y": ACC_Y_COL_NAME, 
+        "Z": ACC_Z_COL_NAME 
+        }, inplace=True)
+            
+    
+    df[[ACC_X_COL_NAME, ACC_Y_COL_NAME, ACC_Z_COL_NAME]] *= G_EARTH    
+    return df 
+
+        
+
+
+
 if __name__ == "__main__":
-    df = read_weibke_hares()
+    df = read_gaschk_quoll()
     print(df.head())
+    print(df.info())
     print(df.shape)
     print(df.groupby(BEHAVIOR_COL_NAME).size())
+    print(type(df.loc[0, "ts"]))
+    print(df.loc[0, "ts"])
+    
+    frame = df 
+    sample_gap = frame["ts"].diff().median()
+    print(f"Median sample gap: {sample_gap}")
+    
+    # sample_hz = 1/sample_gap.total_seconds()
     
